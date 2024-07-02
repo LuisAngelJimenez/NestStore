@@ -25,4 +25,5 @@ export class CreateProductDto {
     @IsNumber()
     @IsPositive()
     category: Category;
+
 }

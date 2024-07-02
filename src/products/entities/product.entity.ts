@@ -42,4 +42,7 @@ export class Product {
     @ManyToOne(()=>Category,
     cat=>cat.products)
     category: Category
+
+    @Column()
+    image?:string;
 }

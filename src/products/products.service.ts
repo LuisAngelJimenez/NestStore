@@ -122,5 +122,17 @@ export class ProductsService {
     
   }
 
+  async addImage(id:number,url:string){
+    try {
+      const product = await this.prodRepo.preload({
+        id,
+        image:url
+      });
+      await this.prodRepo.save(product);
+      return product;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
 }
 

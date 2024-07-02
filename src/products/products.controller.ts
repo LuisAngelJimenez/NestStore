@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { fileValidator } from './helpers/validatonFile';
+import { identity } from 'rxjs';
 
 @Controller('products')
 export class ProductsController {
@@ -56,10 +58,11 @@ export class ProductsController {
   //aqui usaremos el multer PARA SUBIR imagenes//
 
 
-  @Post('withImage')
+  @Post('withImage/:id')
   /*aqui se utilizan interceptors*/
   @UseInterceptors(FileInterceptor('img'/*nombre a darle*/, {
     //tamaño//
+    fileFilter:fileValidator,
     limits: { fieldSize: 3000 },
     //aqui ponemos la ruta donde se va almacenar la imagen//
     storage: diskStorage({
@@ -72,12 +75,16 @@ export class ProductsController {
   })
   )
   //aqui se recibe un uploadedFile para archivos
-  uploadImage(@UploadedFile()
+  uploadImage(@Param('id')id:number,@UploadedFile()
   //recibimos un file de tipo express multer file//
   file:Express.Multer.File) {
-    return{
-      'imagen':file.originalname,
-      'message':'pos si jalo la neta',
-    };
+    if(file){
+      new  BadRequestException('no hay file :(');
+      this.productsService.addImage(id,file.originalname)
+      return{
+        message:'imagen subida correctamente',
+        file: file.originalname
+      };
+    }
   }
 }
