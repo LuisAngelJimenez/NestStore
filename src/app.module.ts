@@ -5,6 +5,8 @@ import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { CategoriesModule } from './categories/categories.module';
+import { BooksModule } from './books/books.module';
+import { LibrosModule } from './libros/libros.module';
 
 
 @Module({
@@ -17,7 +19,7 @@ import { CategoriesModule } from './categories/categories.module';
     database: 'tienditachida',
     synchronize: true,
     autoLoadEntities:true,
-  }), ],
+  }), BooksModule, LibrosModule, ],
   controllers: [AppController],
   providers: [AppService],
 })

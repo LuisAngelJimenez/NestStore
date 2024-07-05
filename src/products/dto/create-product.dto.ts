@@ -3,7 +3,6 @@ import { Category } from "src/categories/entities/category.entity";
 
 export class CreateProductDto {
 
-
     @MinLength(4)
     @IsString()
     product_name: string;
